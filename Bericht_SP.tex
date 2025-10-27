@@ -1,0 +1,173 @@
+\documentclass[12pt,a4paper]{article}
+
+% ----- Sprache, Encoding, Typografie -----
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\linespread{1.06}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+
+% ----- Mathe, Tabellen, Grafiken -----
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{{figs/}}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% ----- Literatur -----
+\usepackage[round,authoryear]{natbib}
+\bibliographystyle{apalike}
+
+% ----- Querverweise -----
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink,capitalise]{cleveref}
+
+% ----- Sonstiges -----
+\newcommand{\todo}[1]{\textit{\textbf{[TODO: #1]}}}
+
+% =========================================================
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\Large Technische Hochschule Ingolstadt}\\[6pt]
+  {\large Studiengang: Data Science in Technik und Wirtschaft}\\[28pt]
+
+  {\LARGE \textbf{Wer schläft länger? Eine kleine Studie unter WI- und DS-Studierenden}}\\[32pt]
+
+  {\large Bericht Statistik Praktikum}\\[24pt]
+
+  \begin{tabular}{ll}
+    Teammitglieder: & Max Mustermann, Maria Musterfrau, etc. \\
+    Matrikelnummern: & 123456, 234567 \\ 
+    Abgabedatum: & 01.01.2025 \\[32pt]
+  \end{tabular}
+
+  % ----- Abstract -----
+  \begin{minipage}{0.85\textwidth}
+    \textbf{Abstract} \\[4pt]
+    In dieser kurzen Studie untersuchst du gemeinsam mit deinem Team, ob Studierende des Studiengangs Data Science im Durchschnitt länger schlafen als Studierende des Wirtschaftsingenieurwesens. Dafür habt ihr im Freundes- und Bekanntenkreis eine Mini-Umfrage durchgeführt und Schlafdauer, Studiengang sowie einige Zusatzinformationen (z.\,B. Lernaufwand, Koffeinkonsum) erhoben. Anschließend habt ihr die Daten bereinigt, deskriptiv ausgewertet und mit einem Hypothesentest geprüft, ob der Unterschied signifikant ist. Die Arbeit zeigt beispielhaft, wie man mit einfachen statistischen Mitteln reale Fragen aus dem Studienalltag beantworten kann.
+  \end{minipage}
+
+\end{titlepage}
+
+% =========================================================
+\section{Einleitung}
+
+Schlaf spielt eine wichtige Rolle für Konzentration, Leistungsfähigkeit und Wohlbefinden. 
+Gerade unter Studierenden gibt es große Unterschiede, was Schlafdauer und Schlafrhythmus betrifft \citep{Mueller2023SchlafStudis}.  
+
+In dieser kleinen Studie geht es um die Frage:
+
+\begin{quote}
+\textbf{„Schlafen Data-Science-Studierende im Durchschnitt \\ länger als Wirtschaftsingenieurwesen-Studierende?“}
+\end{quote}
+
+Du sollst zeigen, dass du grundlegende statistische Arbeitsschritte anwenden kannst:
+von der Datenerhebung über Bereinigung und Visualisierung bis hin zum Hypothesentest und zur Interpretation.  
+
+Ziel ist keine perfekte Studie, sondern ein realistischer, nachvollziehbarer Analyseprozess \citep{Meintrup2019Statistik}.
+
+% =========================================================
+\section{Datenerhebung und -aufbereitung}
+
+\subsection{Erhebungsmethode}
+
+Beschreibe kurz, wie ihr eure Daten gesammelt habt:
+\begin{itemize}
+  \item Welche Fragen wurden gestellt? (z. B. „Wie viele Stunden schläfst du durchschnittlich pro Nacht?“)
+  \item Wie viele Personen haben teilgenommen?
+  \item Wie habt ihr sichergestellt, dass alle Antworten anonym und ehrlich sind?
+\end{itemize}
+
+Beispiel:  
+„Wir haben in zwei Vorlesungen eine anonyme Umfrage mit 24 Teilnehmenden durchgeführt (12 Data Science, 12 WI). Die Befragten gaben ihre durchschnittliche Schlafdauer pro Nacht in Stunden an und schätzten zusätzlich ihren täglichen Koffeinkonsum.“
+
+\subsection{Datensatz}
+
+Fasse deinen Datensatz kurz zusammen:
+\begin{itemize}
+  \item Anzahl der Beobachtungen je Gruppe (DS / WI)
+  \item Erhobene Variablen (z. B. Schlafdauer, Geschlecht, Koffeinkonsum)
+  \item Datentypen (metrisch, kategorial)
+\end{itemize}
+
+\begin{table}[h!]
+  \centering
+  \caption{Ausschnitt des erhobenen Datensatzes}
+  \begin{tabular}{lccc}
+  \toprule
+  \textbf{Studiengang} & \textbf{Schlafstunden} & \textbf{Koffein (mg/Tag)} & \textbf{Geschlecht}\\
+  \midrule
+  Data Science & 7.5 & 120 & w \\
+  WI & 6.8 & 180 & m \\
+  Data Science & 8.1 & 90 & m \\
+  \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Datenbereinigung}
+
+Erläutere kurz, wie ihr mit fehlerhaften oder fehlenden Werten umgegangen seid:
+\begin{itemize}
+  \item Wurden unrealistische Werte (z. B. „12 Stunden Schlaf“) entfernt?
+  \item Wie habt ihr fehlende Angaben behandelt?
+  \item Habt ihr Einheiten vereinheitlicht (z. B. Stunden als Dezimalzahlen)?
+\end{itemize}
+
+% =========================================================
+\section{Deskriptive Statistik}
+
+Fasse die wichtigsten Merkmale eurer Daten zusammen:
+\begin{itemize}
+  \item Mittelwert, Median und Standardabweichung der Schlafdauer je Studiengang
+  \item Grafische Darstellung (z. B. Boxplot oder Histogramm)
+\end{itemize}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.7\textwidth]{placeholder.jpg}
+  \caption{Boxplot der Schlafdauer nach Studiengang}
+\end{figure}
+
+Hier kannst du auch kurze Beobachtungen formulieren, z. B.:  
+„Die DS-Studierenden schlafen im Durchschnitt rund 0.5 Stunden länger, die Streuung ist jedoch relativ hoch.“
+
+% =========================================================
+\section{Hypothesen und Test}
+
+Formuliere eure Hypothesen klar:
+
+\[
+H_0: \mu_{\text{DS}} = \mu_{\text{WI}} \quad \text{vs.} \quad H_1: \mu_{\text{DS}} > \mu_{\text{WI}}
+\]
+
+Führe anschließend den passenden Test durch (z. B. Zwei-Stichproben-\textit{t}-Test) und notiere:
+\begin{itemize}
+  \item Teststatistik und p-Wert
+  \item Entscheidung (z. B. „Wir lehnen \(H_0\) nicht ab“)
+  \item Interpretation im Alltag
+\end{itemize}
+
+Beispiel:  
+„Mit \(p = 0{,}18\) zeigt sich kein signifikanter Unterschied in der mittleren Schlafdauer. Trotzdem schlafen DS-Studierende tendenziell länger.“
+
+% =========================================================
+\section{Diskussion und Fazit}
+
+\begin{itemize}
+  \item Was sagen eure Ergebnisse über die untersuchte Frage aus?
+  \item Welche Faktoren könnten das Ergebnis beeinflusst haben (z. B. Prüfungsstress, Zufall)?
+  \item Was würdest du bei einer größeren Studie anders machen?
+\end{itemize}
+
+\textbf{Beispielhafte Schlussformulierung:}  
+„Unsere kleine Umfrage zeigt, dass Data-Science-Studierende im Mittel rund 30 Minuten länger schlafen als WI-Studierende. Der Unterschied ist jedoch nicht signifikant, was auch an der kleinen Stichprobe liegen kann. Für eine bessere Aussage wären mehr Teilnehmende und ein längerer Erhebungszeitraum sinnvoll.“
+
+% =========================================================
+\bibliography{refs}
+
+\end{document}
+
