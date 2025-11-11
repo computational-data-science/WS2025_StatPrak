@@ -1,0 +1,209 @@
+% !TEX TS-program = pdflatex
+\documentclass[final]{beamer}
+\usepackage[size=a0,orientation=landscape,scale=1.35]{beamerposter}
+
+\usepackage[ngerman]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{xcolor}
+\definecolor{midgray}{RGB}{60,60,60}
+\definecolor{lightgray}{RGB}{245,245,245}
+
+\setbeamercolor{background canvas}{bg=white}
+\setbeamercolor{block title}{fg=white,bg=midgray}
+\setbeamercolor{block body}{fg=black,bg=lightgray}
+\setbeamercolor{title}{fg=midgray}
+
+
+
+\title{\bfseries Sind Rechnungen am Abend höher als mittags?}
+\author{\textbf{Team Statistik 1} (B.Sc. Data Science, 1.\ Semester)}
+\institute{\textbf{Technische Hochschule Ingolstadt – Fakultät Wirtschaftsingenieurwesen}}
+\date{\today}
+
+\newcommand{\smallgap}{\vspace{0.6cm}}
+
+\begin{document}
+\begin{frame}[t]
+
+% Kopf
+\begin{columns}[T]
+  \begin{column}{0.98\textwidth}
+    \vskip1cm
+    \begin{center}
+      {\usebeamercolor[fg]{title}\Huge\inserttitle}\\[0.6cm]
+      {\Large\insertauthor}\\[0.25cm]
+      {\large\insertinstitute}\\[0.6cm]
+      \rule{\textwidth}{1pt}
+    \end{center}
+  \end{column}
+\end{columns}
+
+\vspace{1cm}
+
+% Hauptinhalt
+\begin{columns}[T,totalwidth=\textwidth]
+
+% Spalte 1
+\begin{column}{0.32\textwidth}
+  \begin{block}{1. Forschungsfrage}
+    In vielen Restaurants wird vermutet, dass Gäste am Abend höhere Rechnungen bezahlen als mittags.  
+    Doch ist dieser Unterschied auch \emph{statistisch nachweisbar}?  
+    Wir prüfen diese Frage anhand des bekannten \texttt{tips}-Datensatzes aus Python.  
+
+    \smallgap
+    \textbf{Forschungsfrage:}  
+    Gibt es einen signifikanten Unterschied der durchschnittlichen \texttt{total\_bill} zwischen \textbf{Lunch} und \textbf{Dinner}?  
+
+    \smallgap
+    \textbf{Hypothesen:}
+    \[
+      H_0: \mu_{\text{Lunch}} = \mu_{\text{Dinner}} 
+      \qquad \text{vs.} \qquad 
+      H_1: \mu_{\text{Lunch}} \neq \mu_{\text{Dinner}}
+    \]
+
+    \smallgap
+    Es handelt sich also um einen klassischen \textbf{Gruppenvergleich} mit einer \textbf{kategorialen} und einer \textbf{stetigen} Variable.
+  \end{block}
+
+  \begin{block}{2. Datenbasis und Variablen}
+    Der Datensatz \texttt{tips} enthält Restaurantrechnungen, Trinkgelder und Zusatzinformationen.  
+    Für diese Analyse betrachten wir nur:
+    \begin{itemize}
+      \item \texttt{time} — Kategorie: \textit{Lunch} oder \textit{Dinner}
+      \item \texttt{total\_bill} — Höhe der Gesamtrechnung in US-Dollar
+    \end{itemize}
+    Insgesamt liegen \textbf{244 Beobachtungen} vor, davon 68 zu Lunch und 176 zu Dinner.  
+
+    \smallgap
+    \textbf{Ziel:} Überprüfen, ob sich die Mittelwerte signifikant unterscheiden.
+
+    \smallgap
+    \centering
+    \includegraphics[width=0.95\linewidth]{countplot.pdf}\\[-0.1cm]
+    \small Verteilung der Beobachtungen: mehr Rechnungen abends als mittags
+    \normalsize
+  \end{block}
+\end{column}
+
+% Spalte 2
+\begin{column}{0.34\textwidth}
+  \begin{block}{3. Deskriptive Statistik}
+    \centering
+    \includegraphics[width=0.95\linewidth]{histogram.pdf}\\[-0.1cm]
+    \small \textbf{Histogramm:} Verteilung der Rechnungsbeträge für Lunch und Dinner
+    \normalsize
+
+    \smallgap
+    \textbf{Zentrale Kennzahlen:}
+    \begin{center}
+    \begin{tabularx}{0.9\linewidth}{Xccc}
+      \toprule
+      & $\bar{x}$ & $s$ & $n$ \\
+      \midrule
+      Lunch  & 17.17 & 7.71 & 68 \\
+      Dinner & 20.80 & 9.14 & 176 \\
+      \bottomrule
+    \end{tabularx}
+    \end{center}
+
+    \textit{Medians:} Lunch = 15.97, Dinner = 18.39 \\
+    \textit{Min–Max:} Lunch = [7.51; 43.11], Dinner = [3.07; 50.81]
+
+    \smallgap
+    Bereits visuell zeigt sich: Dinner-Rechnungen sind tendenziell höher und breiter gestreut.
+  \end{block}
+
+  \begin{block}{4. Annahmencheck}
+  Bevor der t-Test eingesetzt wird, müssen einige Voraussetzungen überprüft werden:
+
+  \textbf{1. Normalverteilung:}  
+  Der Shapiro-Wilk-Test ergibt:
+  \begin{itemize}
+    \item Lunch: $W = 0{,}869$, $p = 3{,}6\cdot10^{-6}$, Schiefe = 1.48, Exzess = 2.21
+    \item Dinner: $W = 0{,}933$, $p = 2{,}7\cdot10^{-7}$, Schiefe = 1.03, Exzess = 1.04
+  \end{itemize}
+  Die Daten weichen also formal von der Normalverteilung ab.  
+  Da beide Stichproben aber hinreichend groß sind ($n>30$), gilt der t-Test als robust gegen moderate Abweichungen.  
+
+  \smallgap
+  \textbf{2. Varianzgleichheit:}  
+  Levene-Test (Median) ergibt $p = 0{,}102$ → kein signifikanter Unterschied der Varianzen.  
+  Wir können daher den klassischen t-Test verwenden.
+  \end{block}
+
+\end{column}
+
+% Spalte 3
+\begin{column}{0.32\textwidth}
+  \begin{block}{5. Testdurchführung und Ergebnisse}
+    Für den Vergleich der Mittelwerte wurde ein \textbf{t-Test für unabhängige Stichproben} durchgeführt:
+
+    \[
+      t = -2.90, \quad p = 0.0041
+    \]
+
+    Damit ist der Unterschied \textbf{statistisch signifikant} auf dem 5\%-Niveau.  
+    Es ist also sehr unwahrscheinlich, dass der beobachtete Unterschied rein zufällig auftritt.
+
+    \smallgap
+    Zur Bewertung der praktischen Relevanz wurde zusätzlich die \textbf{Effektstärke (Cohen’s d)} berechnet:
+
+    \[
+      d = -0.41
+    \]
+    Nach der Konvention von Cohen entspricht dies einem \textbf{mittleren Effekt} — also einem spürbaren, aber nicht extremen Unterschied.
+
+    \smallgap
+    \centering
+    \includegraphics[width=0.95\linewidth]{boxplot.pdf}\\[-0.1cm]
+    \small Boxplot der Rechnungsbeträge für Lunch und Dinner
+    \normalsize
+
+    \smallgap
+    Im Mittel liegen die Dinner-Rechnungen etwa \textbf{3,6 \$ über den Lunch-Rechnungen}.
+  \end{block}
+
+  \begin{block}{6. Fazit und Ausblick}
+    \textbf{Fazit:}  
+    Gäste geben am Abend tatsächlich im Durchschnitt mehr Geld aus als mittags.  
+    Der Unterschied ist \textbf{statistisch signifikant} und zeigt einen \textbf{moderat ausgeprägten Effekt}.  
+    Trotz formaler Abweichung von der Normalverteilung sind die Ergebnisse aufgrund der robusten Stichprobengröße belastbar.
+
+    \smallgap
+    \textbf{Limitationen:}
+    \begin{itemize}
+      \item Beobachtungsdaten – keine Kausalinterpretation möglich
+      \item mögliche Störfaktoren (z.\,B. Gruppengröße, Alkohol, Wochentag)
+    \end{itemize}
+
+    \textbf{Ausblick:}
+    \begin{itemize}
+      \item Erweiterung: Zusammenhang zwischen Rechnung und Trinkgeld
+      \item multivariate Modelle zur Kontrolle weiterer Variablen
+    \end{itemize}
+
+  \end{block}
+\end{column}
+
+\end{columns}
+
+% Fuß
+\begin{columns}[T]
+  \begin{column}{0.98\textwidth}
+    \begin{center}
+      \rule{\textwidth}{1pt}\\[0.35cm]
+      {\small Statistik I – Gruppenvergleich \quad|\quad Datensatz: \texttt{tips} \quad|\quad THI, WS 2025/26}
+    \end{center}
+  \end{column}
+\end{columns}
+
+\end{frame}
+\end{document}
